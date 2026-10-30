@@ -1,0 +1,60 @@
+# Secrets come from the git-ignored .env file next to this one (Compose reads it for ${…}
+# interpolation). Only the variables listed under `environment` reach a container.
+# Passwords and tokens never get a fallback value here: use ${VAR:?Set VAR in .env} so a
+# missing .env stops compose instead of starting with a value published in this repo.
+#
+# Host ports are bound to 127.0.0.1 only. Docker publishes ports through its own iptables
+# rules, which bypass ufw, so a bare "3000:80" would serve the app on the server's public IP
+# and skip Cloudflare. The tunnel reaches rixus-frontend over tunnel-net instead.
+services:
+  # __TOOL__ itself (server, broker, database, …) goes here when the tool runs as a service.
+  # Give it a healthcheck so the backend can wait for `service_healthy`, and put it only on
+  # backend-net (internal: no route out, unreachable from the public nginx container):
+  #   networks:
+  #     - backend-net
+
+  backend:
+    build:
+      context: ./backend
+      target: runtime
+    container_name: __SLUG__-backend
+    ports:
+      - "127.0.0.1:__API_PORT__:__API_PORT__"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "__HEALTHCHECK__"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - default
+      - backend-net
+
+  # Production build served by nginx on :80. The container name and tunnel-net match the
+  # Cloudflare tunnel route (http://rixus-frontend:80), so pipeline-run.sh can publish it.
+  # Only this service joins tunnel-net.
+  frontend:
+    build:
+      context: ./frontend
+      target: runtime
+    container_name: rixus-frontend
+    ports:
+      - "127.0.0.1:3000:80"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - default
+      - tunnel-net
+    depends_on:
+      - backend
+
+networks:
+  # The backend and the tool's own services. internal: true gives it no route to the
+  # internet; the backend still reaches the internet (and nginx) through default.
+  backend-net:
+    internal: true
+  tunnel-net:
+    external: true
