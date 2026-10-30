@@ -1,0 +1,9 @@
+{
+  "name": "enterprise-fullstack",
+  "version": "0.1.0",
+  "description": "Role-based agents, convention skills, and guardrail hooks for enterprise full stack development (Java/Spring, Postgres/Flyway, Kafka, Redis, Elasticsearch, React/TypeScript, D3/Three.js, Python ETL, Docker, Azure/AWS).",
+  "author": {
+    "name": "Cody Nicholson"
+  },
+  "keywords": ["fullstack", "spring-boot", "react", "kafka", "postgres", "flyway", "etl", "docker"]
+}

@@ -1,0 +1,29 @@
+{
+  "description": "Guardrails for enterprise-fullstack: block edits to committed Flyway migrations, auto-format edited files.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/protect-migrations.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/format-file.sh\"",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

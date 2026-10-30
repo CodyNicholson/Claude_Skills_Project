@@ -1,0 +1,15 @@
+{
+  "_comment": "Example MCP servers. Not loaded by the plugin. Copy the entries you want into your project's .mcp.json (or into this plugin's .mcp.json), then verify the package/URL against the server's current docs before enabling. Secrets come from environment variables.",
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": { "Authorization": "Bearer ${GITHUB_TOKEN}" }
+    },
+    "postgres-local": {
+      "_comment": "Pick a maintained Postgres MCP server and point it at the LOCAL compose database only. Use a read-only role.",
+      "command": "npx",
+      "args": ["-y", "<postgres-mcp-package>", "postgresql://readonly:readonly@localhost:5432/app"]
+    }
+  }
+}
