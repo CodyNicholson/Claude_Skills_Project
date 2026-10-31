@@ -39,3 +39,38 @@ Follow these 5 sequential phases. **NEVER skip Phase 1 or Phase 2** if the user'
 2. **If a JSON/YAML spec file is provided**, run:
    ```bash
    python3 .claude/skills/design-game/scripts/validate_design_spec.py <path-to-spec.json>
+   ```
+
+### Phase 2: Socratic Clarification & Case-Study Risk Audit
+
+Before generating the final design blueprint, load `.claude/skills/design-game/references/case-study-diagnostics.md` and audit the user's concept for **Design Smells & Contradictions**:
+
+* **Rule of Clarification**: If *any* of the 8 core fields are missing, ambiguous, or contradictory (e.g., requesting a complex 12-button fighting game for one-handed portrait Mobile play, or combining a deeply narrative stealth premise with generic looter-shooter math), **PAUSE** and ask up to 4 targeted, high-leverage clarifying questions.
+* **Rule of Proactive Recommendation**: Whenever you spot a design vulnerability, cite the exact historical case study from `references/case-study-diagnostics.md` (`Anthem`, `Diablo III`, `Suicide Squad`, `Balan Wonderworld`, `Concord`) and propose 2–3 concrete design improvements inspired by successful benchmarks (`Breath of the Wild`, `Mario Kart 8`, `Left 4 Dead`, `BioShock`, `Hades`, `Super Mario Odyssey`, `Astro Bot`).
+
+### Phase 3: Theoretical Synthesis (The Four-Book Blueprint)
+
+Once all inputs are clarified, read `.claude/skills/design-game/references/four-books-framework.md` and generate:
+
+1. **The One-Sheet & Elemental Tetrad Harmony Map** (Rogers & Schell)
+2. **Formal vs. Dramatic Systems Specification** (Fullerton)
+3. **Meaningful Play & Cybernetic Loop Matrix** (Salen & Zimmerman) — explicitly detailing how every core player action achieves **Discernibility** (immediate sensory feedback) and **Integration** (long-term strategic consequence), plus at least one **Negative Feedback Stabilizer** and one **Triangular Risk/Reward Choice**.
+4. **The Three Cs & Metrics Specification** (Rogers) — exact movement metrics, camera perspective/collision rules, and platform-native input mapping.
+5. **The Master Beat Chart** (Rogers) — a complete horizontal markdown table mapping at least 5–10 levels/stages across: *Level/Beat*, *Location & TOD*, *Story/Emotional Beat*, *Alley vs. Arena Structure*, *New Toy/Mechanic (Training Cage)*, *Enemy Archetypes/Hazards*, *Economy/Rewards*, and *Interest Curve Intensity (1-10)*.
+
+### Phase 4: Platform-Specific Engineering & Production Plan
+
+Load `.claude/skills/design-game/references/platform-architecture-guides.md` and generate a tailored technical roadmap for the chosen `target_platform`:
+
+* **If `web` (Web Browser)**: Engine selection (Phaser 3 / PixiJS / Three.js / PlayCanvas / Godot WebExport), bundle size & lazy-loading budgets (<5 MB initial load), WebGL2/WebGPU shader constraints, WebAudio API unlock flow, pointer/keyboard focus handling, `localStorage`/IndexedDB state persistence, and responsive viewport scaling.
+* **If `mobile` (Mobile Game App)**: Engine selection (Unity / Godot / Defold / Flutter Flame), portrait vs. landscape thumb-zone ergonomics, virtual joysticks vs. native gesture recognition, 30–180 second session interruptibility, thermal/battery throttling budgets, haptic feedback (`UIImpactFeedbackGenerator` / Android VibrationEffect), safe-area/notch UI margins, and offline-first sync.
+* **If `desktop` (Desktop Game App)**: Engine selection (Unreal Engine 5 / Godot 4 / Unity / Custom Rust+Bevy), DualSense/Xbox controller + Mouse/Keyboard simultaneous input switching, raw input & key-rebinding tables, ultrawide/multi-monitor & unlocked framerate (`delta_time`) architecture, Steamworks/platform SDK integration (achievements, cloud saves), and modular modding/data-driven JSON tables.
+
+### Phase 5: The Playcentric Prototype & Playtest Plan
+
+Conclude every generated plan with an executable **Iterative Loop Roadmap** (Fullerton & Schell):
+
+1. **Day 1 Paper/Tabletop Prototype**: How to test the constitutive math and resource economy with index cards and dice today.
+2. **Week 1 Grey-Box Kinetic Prototype**: The exact minimum playable build needed to validate the **Three Cs** and the **Core Toy** before any art assets are created.
+3. **Blind Playtest Protocol**: 5 specific observation checkpoints using Fullerton's *Think-Aloud Protocol* and Schell's *Eight Filters*.
+4. **Artifact Output**: Write the finalized design and engineering plan to `docs/game-design-plan.md` (and `docs/design-spec.json` if requested).
